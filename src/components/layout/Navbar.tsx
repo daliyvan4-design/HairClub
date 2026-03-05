@@ -56,18 +56,25 @@ export function Navbar() {
 
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center space-x-8">
-                    {navLinks.map((link) => (
-                        <Link
-                            key={link.name}
-                            href={link.href}
-                            className={cn(
-                                "text-sm uppercase tracking-widest transition-colors duration-300",
-                                isScrolled || typeof window !== 'undefined' && window.location.pathname !== '/' ? "text-luxury-black hover:text-luxury-gold" : "text-white hover:text-luxury-gold"
-                            )}
-                        >
-                            {link.name}
-                        </Link>
-                    ))}
+                    {navLinks.map((link) => {
+                        const isDynamicPage = pathname === "/" || pathname === "/collection";
+                        const isStaticPage = !isDynamicPage;
+
+                        return (
+                            <Link
+                                key={link.name}
+                                href={link.href}
+                                className={cn(
+                                    "text-sm uppercase tracking-widest transition-colors duration-300",
+                                    isStaticPage
+                                        ? "text-luxury-gold font-medium"
+                                        : (isScrolled ? "text-luxury-black hover:text-luxury-gold" : "text-white hover:text-luxury-gold")
+                                )}
+                            >
+                                {link.name}
+                            </Link>
+                        );
+                    })}
                     <Link href="/reservation">
                         <Button variant="primary" className="py-2 text-xs">
                             Réserver
@@ -77,7 +84,7 @@ export function Navbar() {
 
                 {/* Mobile Toggle */}
                 <div className="md:hidden flex items-center space-x-4">
-                    <a href="tel:+33123456789" className="text-luxury-gold">
+                    <a href="tel:+2250170434143" className="text-luxury-gold">
                         <Phone size={20} />
                     </a>
                     <button
@@ -98,7 +105,7 @@ export function Navbar() {
             >
                 <button
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="absolute top-6 right-6 text-black"
+                    className="absolute top-6 right-6 text-luxury-gold"
                 >
                     <X size={32} />
                 </button>
@@ -107,7 +114,7 @@ export function Navbar() {
                         key={link.name}
                         href={link.href}
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="text-2xl uppercase tracking-[0.2em] text-black hover:text-luxury-gold transition-colors duration-300"
+                        className="text-2xl uppercase tracking-[0.2em] text-luxury-gold hover:text-black transition-colors duration-300 font-bold"
                     >
                         {link.name}
                     </Link>
