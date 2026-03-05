@@ -28,19 +28,10 @@ export default function Contact() {
                             </div>
                             <div>
                                 <p className="text-[10px] uppercase tracking-widest text-luxury-gray mb-1">Téléphone</p>
-                                <a href="tel:+1234567890" className="text-xl font-light hover:text-luxury-gold transition-colors">+1 (234) 567-890</a>
+                                <a href="tel:+2250170434143" className="text-xl font-light hover:text-luxury-gold transition-colors">+225 01 70 43 41 43</a>
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-6 group">
-                            <div className="p-3 bg-luxury-secondary text-luxury-gold border border-black/5 transition-colors group-hover:border-luxury-gold/30">
-                                <Mail size={24} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] uppercase tracking-widest text-luxury-gray mb-1">Email</p>
-                                <a href="mailto:contact@hairclub.luxury" className="text-xl font-light hover:text-luxury-gold transition-colors">contact@hairclub.luxury</a>
-                            </div>
-                        </div>
 
                         <div className="flex items-start gap-6 group">
                             <div className="p-3 bg-luxury-secondary text-luxury-gold border border-black/5 transition-colors group-hover:border-luxury-gold/30">
@@ -49,7 +40,7 @@ export default function Contact() {
                             <div>
                                 <p className="text-[10px] uppercase tracking-widest text-luxury-gray mb-1">Boutique & Salon</p>
                                 <address className="not-italic text-xl font-light leading-relaxed">
-                                    Quartier de la Mode, Rue de la Distinction
+                                    Deux plateaux 7e tranche ENA, face à l'agence Orange
                                 </address>
                             </div>
                         </div>
@@ -58,10 +49,10 @@ export default function Contact() {
                     <div className="space-y-6">
                         <h2 className="text-xl font-display uppercase tracking-widest border-b border-luxury-gold/20 pb-4">Suivez-nous</h2>
                         <div className="flex gap-4">
-                            <a href="#" className="p-4 bg-luxury-secondary text-luxury-gold border border-black/5 hover:border-luxury-gold transition-all">
+                            <a href="https://www.instagram.com/hairclubabidjan_?igsh=MXMzMnQ3a3M5Y2lxZA==" target="_blank" rel="noopener noreferrer" className="p-4 bg-luxury-secondary text-luxury-gold border border-black/5 hover:border-luxury-gold transition-all">
                                 <Instagram size={20} />
                             </a>
-                            <a href="#" className="p-4 bg-luxury-secondary text-luxury-gold border border-black/5 hover:border-luxury-gold transition-all">
+                            <a href="https://www.facebook.com/share/1CG488Fkkr/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="p-4 bg-luxury-secondary text-luxury-gold border border-black/5 hover:border-luxury-gold transition-all">
                                 <Facebook size={20} />
                             </a>
                         </div>
@@ -80,7 +71,7 @@ export default function Contact() {
                             </p>
                             <div className="mt-6">
                                 <a
-                                    href="https://www.google.com/maps/search/?api=1&query=Hair+Club+Luxury+Boutique"
+                                    href="https://maps.app.goo.gl/uxDey4cXH3tT6ptR7?g_st=ipc"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >
