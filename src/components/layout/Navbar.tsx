@@ -23,6 +23,7 @@ export function Navbar() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // ONLY 3 links here. Réserver is ONLY in the Button below.
     const navLinks = [
         { name: "Accueil", href: "/" },
         { name: "Nos Prestations", href: "/prestations" },
@@ -43,7 +44,6 @@ export function Navbar() {
                         alt="HAIR CLUB"
                         className="h-full w-full object-contain"
                         onError={(e) => {
-                            // Fallback to text if image fails
                             (e.target as any).style.display = 'none';
                             (e.target as any).nextSibling.style.display = 'block';
                         }}
@@ -74,6 +74,7 @@ export function Navbar() {
                             </Link>
                         );
                     })}
+                    {/* THIS IS THE GOLD-FRAMED BUTTON */}
                     <Link href="/reservation">
                         <Button variant="primary" className="py-2 text-xs">
                             Réserver
@@ -118,7 +119,7 @@ export function Navbar() {
                         {link.name}
                     </Link>
                 ))}
-                <Link href="/reservation" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/reservation" onClick={() => setIsMobileMenuOpen(true)}>
                     <Button variant="primary" className="mt-4 px-12">
                         Réserver
                     </Button>
