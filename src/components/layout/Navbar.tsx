@@ -25,7 +25,7 @@ export function Navbar() {
 
     const navLinks = [
         { name: "Accueil", href: "/" },
-        { name: "Collection", href: "/collection" },
+        { name: "Nos Prestations", href: "/prestations" },
         { name: "Réserver", href: "/reservation" },
         { name: "Contact", href: "/contact" },
     ];
@@ -57,7 +57,7 @@ export function Navbar() {
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center space-x-8">
                     {navLinks.map((link) => {
-                        const isDynamicPage = pathname === "/" || pathname === "/collection";
+                        const isDynamicPage = pathname === "/" || pathname === "/prestations";
                         const isStaticPage = !isDynamicPage;
 
                         return (
