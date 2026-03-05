@@ -31,7 +31,7 @@ export default function AdminDashboard() {
     const [collectionVideo, setCollectionVideo] = useState("");
     const [collectionItems, setCollectionItems] = useState<CollectionItem[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [activeTab, setActiveTab] = useState<"reservations" | "collection" | "videos">("reservations");
+    const [activeTab, setActiveTab] = useState<"reservations" | "prestations" | "videos">("reservations");
     const [resTab, setResTab] = useState<"pending" | "confirmed">("pending");
 
     // New item form state
@@ -142,7 +142,7 @@ export default function AdminDashboard() {
         const updated = [...collectionItems, item];
         setCollectionItems(updated);
         localStorage.setItem("hair_club_collection_items", JSON.stringify(updated));
-        setNewItem({ title: "", category: "Mèches Brutes", image: "", description: "" });
+        setNewItem({ title: "", category: "Soin des Cheveux", image: "", description: "" });
     };
 
     if (!isLoaded) return null;
@@ -178,10 +178,10 @@ export default function AdminDashboard() {
                         Réservations
                     </button>
                     <button
-                        onClick={() => setActiveTab("collection")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "collection" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
+                        onClick={() => setActiveTab("prestations")}
+                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "prestations" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                     >
-                        Collection
+                        Prestations
                     </button>
                     <button
                         onClick={() => setActiveTab("videos")}
@@ -277,21 +277,21 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* TAB: COLLECTION */}
-            {activeTab === "collection" && (
+            {/* TAB: PRESTATIONS */}
+            {activeTab === "prestations" && (
                 <div className="space-y-12">
                     {/* Formulaire d'ajout */}
                     <div className="premium-card bg-luxury-secondary/20 border-black/5">
                         <div className="flex items-center gap-3 mb-8">
                             <Plus className="text-luxury-gold" size={20} />
-                            <h2 className="text-lg font-display uppercase tracking-wider text-black">Ajouter à la Collection</h2>
+                            <h2 className="text-lg font-display uppercase tracking-wider text-black">Ajouter une Prestation</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                             <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Nom de l'article</label>
+                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Nom du Service</label>
                                 <input
                                     className="w-full bg-white border border-black/10 px-4 py-3 text-sm focus:border-luxury-gold outline-none text-black transition-all"
-                                    placeholder="Ex: Lisse Ebène"
+                                    placeholder="Ex: Soin des Cheveux"
                                     value={newItem.title}
                                     onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
                                 />
@@ -303,13 +303,15 @@ export default function AdminDashboard() {
                                     value={newItem.category}
                                     onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
                                 >
-                                    <option>Mèches Brutes</option>
-                                    <option>Perruque Custom</option>
-                                    <option>Accessoires de Luxe</option>
+                                    <option>Soin des Cheveux</option>
+                                    <option>Soin des Perruques</option>
+                                    <option>Conception sur Mesure</option>
+                                    <option>Pose de Perruque</option>
+                                    <option>Autre</option>
                                 </select>
                             </div>
                             <div className="space-y-2 md:col-span-2">
-                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Image de l'article</label>
+                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Image de la Prestation</label>
                                 <div className="flex gap-4">
                                     <label className="flex-1 cursor-pointer bg-white border border-black/10 px-4 py-3 text-sm text-luxury-gray flex items-center justify-between hover:border-luxury-gold transition-all">
                                         <span>{newItem.image ? "Image sélectionnée" : "Uploader une image"}</span>
@@ -318,7 +320,7 @@ export default function AdminDashboard() {
                                     </label>
                                     <div className="flex gap-2">
                                         <Button onClick={addItem} className="px-8 whitespace-nowrap">Ajouter</Button>
-                                        <Button variant="outline" onClick={() => setNewItem({ title: "", category: "Mèches Brutes", image: "", description: "" })} className="p-3">
+                                        <Button variant="outline" onClick={() => setNewItem({ title: "", category: "Soin des Cheveux", image: "", description: "" })} className="p-3">
                                             <X size={16} />
                                         </Button>
                                     </div>
@@ -330,7 +332,7 @@ export default function AdminDashboard() {
                                 <textarea
                                     className="w-full bg-white border border-black/10 px-4 py-3 text-sm focus:border-luxury-gold outline-none text-black transition-all resize-none"
                                     rows={2}
-                                    placeholder="Décrivez les détails de l'article..."
+                                    placeholder="Décrivez les détails du service..."
                                     value={newItem.description}
                                     onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
                                 />
@@ -417,7 +419,7 @@ export default function AdminDashboard() {
                             </div>
 
                             <div className="space-y-4 pt-4">
-                                <h3 className="text-xs uppercase tracking-[0.2em] font-bold text-luxury-gold border-b border-black/5 pb-2">Vidéo de fond (Collection)</h3>
+                                <h3 className="text-xs uppercase tracking-[0.2em] font-bold text-luxury-gold border-b border-black/5 pb-2">Vidéo de fond (Prestations)</h3>
                                 <div className="flex flex-col gap-2 p-4 bg-luxury-secondary/30 border border-black/5 rounded-sm">
                                     <label className="text-[10px] uppercase tracking-widest text-luxury-gray">Vidéo de fond</label>
                                     <div className="flex gap-2">
