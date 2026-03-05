@@ -11,14 +11,14 @@ import { getMedia } from "@/lib/media-db";
 const slides = [
     {
         type: "video",
-        url: "https://cdn.pixabay.com/vimeo/328494056/hair-22920.mp4?width=1280",
+        url: "/assets/videos/hero-1.mp4",
         title: "L'Excellence Capillaire",
         subtitle: "Découvrez notre collection de mèches brutes et perruques de luxe.",
     },
     {
-        type: "image",
-        url: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=1920",
-        title: "Sur-Mesure & Distinction",
+        type: "video",
+        url: "/assets/videos/hero-2.mp4",
+        title: "Beauté & Distinction",
         subtitle: "Une confection artisanale pour une allure unique.",
     }
 ];
@@ -30,24 +30,31 @@ export function Hero() {
     useEffect(() => {
         const loadHeroContent = async () => {
             const savedHero = localStorage.getItem("hair_club_hero_videos");
+            let urls = slides.map(s => s.url);
+
             if (savedHero) {
-                const urls = JSON.parse(savedHero);
-
-                // Rehydrate from IndexedDB
-                const hydratedHero = await Promise.all(urls.map(async (url: string, idx: number) => {
-                    const blob = await getMedia(`hero_${idx}`);
-                    const finalUrl = blob ? URL.createObjectURL(blob) : url;
-
-                    return {
-                        type: "video",
-                        url: finalUrl,
-                        title: idx === 0 ? "L'Excellence Capillaire" : "Beauté & Distinction",
-                        subtitle: idx === 0 ? "Collection de mèches brutes et perruques de luxe." : "L'art de la confection artisanale."
-                    };
-                }));
-
-                if (hydratedHero.length > 0) setActiveSlides(hydratedHero as any);
+                try {
+                    const parsed = JSON.parse(savedHero);
+                    if (parsed && parsed.length > 0) urls = parsed;
+                } catch (e) {
+                    console.error("Failed to parse hero videos", e);
+                }
             }
+
+            // Rehydrate from IndexedDB
+            const hydratedHero = await Promise.all(urls.map(async (url: string, idx: number) => {
+                const blob = await getMedia(`hero_${idx}`);
+                const finalUrl = blob ? URL.createObjectURL(blob) : url;
+
+                return {
+                    type: "video",
+                    url: finalUrl,
+                    title: idx === 0 ? "L'Excellence Capillaire" : (idx === 1 ? "Beauté & Distinction" : "Hair Club Excellence"),
+                    subtitle: idx === 0 ? "Collection de mèches brutes et perruques de luxe." : "L'art de la confection artisanale."
+                };
+            }));
+
+            setActiveSlides(hydratedHero as any);
         };
         loadHeroContent();
     }, []);

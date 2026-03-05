@@ -43,7 +43,7 @@ export default function AdminDashboard() {
             if (savedBookings) setBookings(JSON.parse(savedBookings));
 
             const savedHero = localStorage.getItem("hair_club_hero_videos");
-            const heroUrls = savedHero ? JSON.parse(savedHero) : ["https://cdn.pixabay.com/vimeo/328494056/hair-22920.mp4?width=1280"];
+            const heroUrls = savedHero ? JSON.parse(savedHero) : ["/assets/videos/hero-1.mp4", "/assets/videos/hero-2.mp4"];
 
             // Rehydrate Blobs from IndexedDB
             const hydratedHero = await Promise.all(heroUrls.map(async (url: string, i: number) => {
@@ -438,8 +438,8 @@ export default function AdminDashboard() {
                             <div className="flex gap-4">
                                 <Button onClick={saveVideos} className="flex-1 py-5 text-sm tracking-widest shadow-xl shadow-luxury-gold/10">ENREGISTRER TOUTE LA CONFIGURATION</Button>
                                 <Button variant="outline" onClick={() => {
-                                    setHeroVideos(["https://cdn.pixabay.com/vimeo/328494056/hair-22920.mp4?width=1280"]);
-                                    setCollectionVideo("");
+                                    setHeroVideos(["/assets/videos/hero-1.mp4", "/assets/videos/hero-2.mp4"]);
+                                    setCollectionVideo("/assets/videos/prestations-bg.mp4");
                                 }} className="px-8">Réinitialiser</Button>
                             </div>
                         </div>
