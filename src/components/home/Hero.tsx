@@ -4,9 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { getMedia } from "@/lib/media-db";
 
 const slides = [
     {
@@ -25,76 +23,36 @@ const slides = [
 
 export function Hero() {
     const [current, setCurrent] = useState(0);
-    const [activeSlides, setActiveSlides] = useState(slides);
-
-    useEffect(() => {
-        const loadHeroContent = async () => {
-            const savedHero = localStorage.getItem("hair_club_hero_videos");
-            let urls = slides.map(s => s.url);
-
-            if (savedHero) {
-                try {
-                    const parsed = JSON.parse(savedHero);
-                    if (parsed && parsed.length > 0) urls = parsed;
-                } catch (e) {
-                    console.error("Failed to parse hero videos", e);
-                }
-            }
-
-            // Rehydrate from IndexedDB
-            const hydratedHero = await Promise.all(urls.map(async (url: string, idx: number) => {
-                const blob = await getMedia(`hero_${idx}`);
-                const finalUrl = blob ? URL.createObjectURL(blob) : url;
-
-                return {
-                    type: "video",
-                    url: finalUrl,
-                    title: idx === 0 ? "L'Excellence Capillaire" : (idx === 1 ? "Beauté & Distinction" : "Hair Club Excellence"),
-                    subtitle: idx === 0 ? "Collection de mèches brutes et perruques de luxe." : "L'art de la confection artisanale."
-                };
-            }));
-
-            setActiveSlides(hydratedHero as any);
-        };
-        loadHeroContent();
-    }, []);
 
     useEffect(() => {
         const timer = setInterval(() => {
-            setCurrent((prev) => (prev + 1) % activeSlides.length);
+            setCurrent((prev) => (prev + 1) % slides.length);
         }, 8000);
         return () => clearInterval(timer);
-    }, [activeSlides]);
+    }, []);
 
     return (
         <section className="relative h-screen w-full overflow-hidden bg-black">
-            <AnimatePresence>
+            <AnimatePresence mode="wait">
                 <motion.div
                     key={current}
-                    initial={{ opacity: 0, scale: 1.05 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 1.02 }}
-                    transition={{ duration: 1.2, ease: "easeInOut" }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 1.5, ease: "easeInOut" }}
                     className="absolute inset-0"
                 >
-                    {activeSlides[current].type === "video" ? (
-                        <video
-                            autoPlay
-                            muted
-                            loop
-                            playsInline
-                            key={activeSlides[current].url}
-                            className="h-full w-full object-cover"
-                            src={activeSlides[current].url}
-                        />
-                    ) : (
-                        <div
-                            className="h-full w-full bg-cover bg-center"
-                            style={{ backgroundImage: `url(${activeSlides[current].url})` }}
-                        />
-                    )}
-
-                    <div className="absolute inset-0 bg-black/30" />
+                    <video
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                        key={slides[current].url}
+                        className="h-full w-full object-cover"
+                        src={slides[current].url}
+                    />
+                    <div className="absolute inset-0 bg-black/40" />
                 </motion.div>
             </AnimatePresence>
 
@@ -109,14 +67,14 @@ export function Hero() {
                         Bienvenue chez Hair Club
                     </span>
                     <h1 className="text-5xl md:text-8xl font-display font-bold mb-6 tracking-tighter leading-none text-white drop-shadow-lg">
-                        {activeSlides[current].title.split(" ").map((word, i) => (
+                        {slides[current].title.split(" ").map((word, i) => (
                             <span key={i} className={i % 2 !== 0 ? "text-luxury-gold" : ""}>
                                 {word}{" "}
                             </span>
                         ))}
                     </h1>
                     <p className="text-lg md:text-xl text-white/90 mb-10 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md">
-                        {activeSlides[current].subtitle}
+                        {slides[current].subtitle}
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                         <Link href="/reservation">
@@ -135,7 +93,7 @@ export function Hero() {
 
             {/* Slide Indicators */}
             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
-                {activeSlides.map((_, i) => (
+                {slides.map((_, i) => (
                     <button
                         key={i}
                         onClick={() => setCurrent(i)}
