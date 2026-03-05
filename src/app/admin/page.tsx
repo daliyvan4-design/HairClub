@@ -173,19 +173,19 @@ export default function AdminDashboard() {
                 <div className="flex bg-luxury-secondary p-1 border border-black/5 rounded-sm">
                     <button
                         onClick={() => setActiveTab("reservations")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "reservations" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gray hover:text-black")}
+                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "reservations" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                     >
                         Réservations
                     </button>
                     <button
                         onClick={() => setActiveTab("collection")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "collection" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gray hover:text-black")}
+                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "collection" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                     >
                         Collection
                     </button>
                     <button
                         onClick={() => setActiveTab("videos")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "videos" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gray hover:text-black")}
+                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "videos" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                     >
                         Vidéos
                     </button>
@@ -199,13 +199,13 @@ export default function AdminDashboard() {
                         <div className="flex gap-8">
                             <button
                                 onClick={() => setResTab("pending")}
-                                className={cn("text-xs uppercase tracking-widest pb-4 -mb-4 transition-all relative", resTab === "pending" ? "text-luxury-gold font-bold border-b-2 border-luxury-gold" : "text-luxury-gray hover:text-black")}
+                                className={cn("text-xs uppercase tracking-widest pb-4 -mb-4 transition-all relative", resTab === "pending" ? "text-luxury-gold font-bold border-b-2 border-luxury-gold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                             >
                                 En attente ({bookings.filter(b => b.status === "En attente").length})
                             </button>
                             <button
                                 onClick={() => setResTab("confirmed")}
-                                className={cn("text-xs uppercase tracking-widest pb-4 -mb-4 transition-all relative", resTab === "confirmed" ? "text-luxury-gold font-bold border-b-2 border-luxury-gold" : "text-luxury-gray hover:text-black")}
+                                className={cn("text-xs uppercase tracking-widest pb-4 -mb-4 transition-all relative", resTab === "confirmed" ? "text-luxury-gold font-bold border-b-2 border-luxury-gold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                             >
                                 Confirmées ({bookings.filter(b => b.status === "Confirmé").length})
                             </button>
