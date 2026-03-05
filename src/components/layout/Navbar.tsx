@@ -119,7 +119,7 @@ export function Navbar() {
                         {link.name}
                     </Link>
                 ))}
-                <Link href="/reservation" onClick={() => setIsMobileMenuOpen(true)}>
+                <Link href="/reservation" onClick={() => setIsMobileMenuOpen(false)}>
                     <Button variant="primary" className="mt-4 px-12">
                         Réserver
                     </Button>
