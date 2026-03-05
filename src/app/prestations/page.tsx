@@ -7,10 +7,10 @@ import { Phone } from "lucide-react";
 import { getMedia } from "@/lib/media-db";
 
 const DEFAULT_PRESTATIONS = [
-    { id: 1, nom: "Soin des Cheveux", description: "Traitements profonds et rituels de soin pour une santé capillaire optimale.", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800", categorie: "SOINS" },
-    { id: 2, nom: "Soin des Perruques", description: "Remise en état, lavage et hydratation de vos perruques pour prolonger leur éclat.", image: "https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&q=80&w=800", categorie: "ENTRETIEN" },
-    { id: 3, nom: "Conception sur Mesure", description: "Création de perruques uniques adaptées à votre morphologie et vos envies.", image: "https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&q=80&w=800", categorie: "CRÉATION" },
-    { id: 4, nom: "Pose de Perruque", description: "Installation professionnelle indétectable pour un rendu naturel et élégant.", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800", categorie: "TISSAGE" },
+    { id: 1, nom: "Soin des Cheveux", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels.", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800", categorie: "SOINS" },
+    { id: 2, nom: "Soin des Perruques", description: "Entretien complet et revitalisation pour préserver la beauté de vos fibres.", image: "https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&q=80&w=800", categorie: "ENTRETIEN" },
+    { id: 3, nom: "Conception sur Mesure", description: "Création artisanale unique, adaptée à vos mesures et à votre style.", image: "https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&q=80&w=800", categorie: "CRÉATION" },
+    { id: 4, nom: "Pose de Perruque", description: "Installation professionnelle pour un rendu naturel et une fixation parfaite.", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800", categorie: "POSE" },
 ];
 
 export default function Prestations() {

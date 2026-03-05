@@ -63,8 +63,10 @@ export default function AdminDashboard() {
 
             const savedItems = localStorage.getItem("hair_club_collection_items");
             const items = savedItems ? JSON.parse(savedItems) : [
-                { id: 1, title: "Lisse Soyeux", category: "Mèches Brutes", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1", description: "Mèches 100% naturelles." },
-                { id: 2, title: "Boucle Royale", category: "Perruque Custom", image: "https://images.unsplash.com/photo-1522337360788-8b13df772ce5", description: "Une définition parfaite." },
+                { id: 1, title: "Soin des Cheveux", category: "SOINS", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels." },
+                { id: 2, title: "Soin des Perruques", category: "ENTRETIEN", image: "https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&q=80&w=800", description: "Entretien complet et revitalisation pour préserver la beauté de vos fibres." },
+                { id: 3, title: "Conception sur Mesure", category: "CRÉATION", image: "https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&q=80&w=800", description: "Création artisanale unique, adaptée à vos mesures et à votre style." },
+                { id: 4, title: "Pose de Perruque", category: "POSE", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800", description: "Installation professionnelle pour un rendu naturel et une fixation parfaite." },
             ];
 
             const hydratedItems = await Promise.all(items.map(async (item: any) => {
@@ -75,9 +77,9 @@ export default function AdminDashboard() {
 
             const savedShowcase = localStorage.getItem("hair_club_showcase");
             const showcaseData = savedShowcase ? JSON.parse(savedShowcase) : [
-                { id: 1, title: "Mèches Premium", subtitle: "Sélection Rare", image: "" },
-                { id: 2, title: "L'Art du Sur-Mesure", subtitle: "Confection Elite", image: "" },
-                { id: 3, title: "Éclat & Pureté", subtitle: "Qualité Ultime", image: "" },
+                { id: 1, title: "Mèches Premium", subtitle: "Sélection Rare", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800" },
+                { id: 2, title: "L'Art du Sur-Mesure", subtitle: "Confection Elite", image: "https://images.unsplash.com/photo-1522337360788-8b13df772ce5?auto=format&fit=crop&q=80&w=800" },
+                { id: 3, title: "Éclat & Pureté", subtitle: "Qualité Ultime", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800" },
             ];
             const hydratedShowcase = await Promise.all(showcaseData.map(async (item: any) => {
                 const blob = await getMedia(`showcase_${item.id}`);
