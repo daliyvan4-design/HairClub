@@ -117,9 +117,9 @@ export function Hero() {
                                 Prendre RDV
                             </Button>
                         </Link>
-                        <Link href="/collection">
+                        <Link href="/prestations">
                             <Button variant="outline" className="px-10 py-4 text-base border-white text-white hover:bg-white hover:text-black">
-                                Voir la collection
+                                Nos Prestations
                             </Button>
                         </Link>
                     </div>
