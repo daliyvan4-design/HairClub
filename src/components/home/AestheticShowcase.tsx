@@ -44,17 +44,17 @@ export function AestheticShowcase() {
                             <img
                                 src={item.image}
                                 alt={item.title}
-                                className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110"
+                                className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110 group-active:grayscale-0 group-active:scale-110"
                             />
-                            <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/80 via-black/20 to-transparent transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                                <span className="text-luxury-gold text-[10px] uppercase tracking-[0.3em] font-bold mb-2 block opacity-0 group-hover:opacity-100 transition-opacity duration-700 delay-100">
+                            <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/80 via-black/20 to-transparent transform translate-y-4 group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-500">
+                                <span className="text-luxury-gold text-[10px] uppercase tracking-[0.3em] font-bold mb-2 block opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-700 delay-100">
                                     {item.subtitle}
                                 </span>
                                 <h3 className="text-white text-2xl font-display uppercase tracking-widest">
                                     {item.title}
                                 </h3>
                             </div>
-                            <div className="absolute inset-0 border border-luxury-gold/0 group-hover:border-luxury-gold/30 transition-all duration-700 m-4 pointer-events-none" />
+                            <div className="absolute inset-0 border border-luxury-gold/0 group-hover:border-luxury-gold/30 group-active:border-luxury-gold/30 transition-all duration-700 m-4 pointer-events-none" />
                         </motion.div>
                     ))}
                 </div>

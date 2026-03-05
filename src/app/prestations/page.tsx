@@ -61,7 +61,7 @@ export default function Prestations() {
                                 <img
                                     src={item.image}
                                     alt={item.nom || (item as any).title}
-                                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale group-hover:grayscale-0"
+                                    className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 group-active:scale-110 grayscale group-hover:grayscale-0 group-active:grayscale-0"
                                 />
                                 <div className="absolute top-4 left-4 size-fit bg-black/80 backdrop-blur-md px-3 py-1">
                                     <span className="text-[10px] text-luxury-gold uppercase tracking-widest font-bold">
