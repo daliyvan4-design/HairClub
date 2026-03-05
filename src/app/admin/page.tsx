@@ -17,30 +17,13 @@ interface Booking {
 
 import { saveMedia, getMedia, deleteMedia } from "@/lib/media-db";
 
-interface CollectionItem {
-    id: number;
-    title: string;
-    category: string;
-    image: string;
-    description: string;
-}
-
 export default function AdminDashboard() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [heroVideos, setHeroVideos] = useState<string[]>([]);
     const [collectionVideo, setCollectionVideo] = useState("");
-    const [collectionItems, setCollectionItems] = useState<CollectionItem[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [activeTab, setActiveTab] = useState<"reservations" | "prestations" | "videos" | "vitrine">("reservations");
+    const [activeTab, setActiveTab] = useState<"reservations" | "videos">("reservations");
     const [resTab, setResTab] = useState<"pending" | "confirmed">("pending");
-    const [showcaseItems, setShowcaseItems] = useState([
-        { id: 1, title: "", subtitle: "", image: "" },
-        { id: 2, title: "", subtitle: "", image: "" },
-        { id: 3, title: "", subtitle: "", image: "" },
-    ]);
-
-    // New item form state
-    const [newItem, setNewItem] = useState({ title: "", category: "Mèches Brutes", image: "", description: "" });
 
     useEffect(() => {
         const loadAll = async () => {
@@ -60,32 +43,6 @@ export default function AdminDashboard() {
             const savedCollVideo = localStorage.getItem("hair_club_collection_video");
             const collBlob = await getMedia("collection_bg");
             setCollectionVideo(collBlob ? URL.createObjectURL(collBlob) : savedCollVideo || "");
-
-            const savedItems = localStorage.getItem("hair_club_collection_items");
-            const items = savedItems ? JSON.parse(savedItems) : [
-                { id: 1, title: "Soin des Cheveux", category: "SOINS", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels." },
-                { id: 2, title: "Soin des Perruques", category: "ENTRETIEN", image: "https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&q=80&w=800", description: "Entretien complet et revitalisation pour préserver la beauté de vos fibres." },
-                { id: 3, title: "Conception sur Mesure", category: "CRÉATION", image: "https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&q=80&w=800", description: "Création artisanale unique, adaptée à vos mesures et à votre style." },
-                { id: 4, title: "Pose de Perruque", category: "POSE", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800", description: "Installation professionnelle pour un rendu naturel et une fixation parfaite." },
-            ];
-
-            const hydratedItems = await Promise.all(items.map(async (item: any) => {
-                const blob = await getMedia(`item_${item.id}`);
-                return blob ? { ...item, image: URL.createObjectURL(blob) } : item;
-            }));
-            setCollectionItems(hydratedItems);
-
-            const savedShowcase = localStorage.getItem("hair_club_showcase");
-            const showcaseData = savedShowcase ? JSON.parse(savedShowcase) : [
-                { id: 1, title: "Mèches Premium", subtitle: "Sélection Rare", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800" },
-                { id: 2, title: "L'Art du Sur-Mesure", subtitle: "Confection Elite", image: "https://images.unsplash.com/photo-1522337360788-8b13df772ce5?auto=format&fit=crop&q=80&w=800" },
-                { id: 3, title: "Éclat & Pureté", subtitle: "Qualité Ultime", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800" },
-            ];
-            const hydratedShowcase = await Promise.all(showcaseData.map(async (item: any) => {
-                const blob = await getMedia(`showcase_${item.id}`);
-                return blob ? { ...item, image: URL.createObjectURL(blob) } : item;
-            }));
-            setShowcaseItems(hydratedShowcase);
 
             setIsLoaded(true);
         };
@@ -107,13 +64,7 @@ export default function AdminDashboard() {
         localStorage.setItem("hair_club_bookings", JSON.stringify(updated));
     };
 
-    const deleteItem = async (id: number) => {
-        if (!confirm("Supprimer cet article de la collection ?")) return;
-        const updated = collectionItems.filter(item => item.id !== id);
-        setCollectionItems(updated);
-        localStorage.setItem("hair_club_collection_items", JSON.stringify(updated));
-        await deleteMedia(`item_${id}`);
-    };
+    /* Prestations management removed - Now hardcoded */
 
     const saveVideos = () => {
         localStorage.setItem("hair_club_hero_videos", JSON.stringify(heroVideos));
@@ -139,46 +90,7 @@ export default function AdminDashboard() {
         }
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const url = URL.createObjectURL(file);
-        setNewItem({ ...newItem, image: url });
-    };
-
-    const addItem = async () => {
-        if (!newItem.title || !newItem.image || !newItem.description) return alert("Veuillez remplir le titre, l'image et la description.");
-        const id = Date.now();
-        const item = { ...newItem, id };
-
-        // Save to IndexedDB if it was a file upload
-        if (newItem.image.startsWith('blob:')) {
-            const res = await fetch(newItem.image);
-            const blob = await res.blob();
-            await saveMedia(`item_${id}`, blob);
-        }
-
-        const updated = [...collectionItems, item];
-        setCollectionItems(updated);
-        localStorage.setItem("hair_club_collection_items", JSON.stringify(updated));
-        setNewItem({ title: "", category: "Soin des Cheveux", image: "", description: "" });
-    };
-
-    const handleShowcaseUpload = async (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-        const url = URL.createObjectURL(file);
-        const updated = showcaseItems.map(item =>
-            item.id === id ? { ...item, image: url } : item
-        );
-        setShowcaseItems(updated);
-        await saveMedia(`showcase_${id}`, file);
-    };
-
-    const saveShowcase = () => {
-        localStorage.setItem("hair_club_showcase", JSON.stringify(showcaseItems));
-        alert("Vitrine mise à jour !");
-    };
+    /* Prestations & Vitrine management removed - Now hardcoded */
 
     if (!isLoaded) return null;
 
@@ -205,32 +117,18 @@ export default function AdminDashboard() {
                     </div>
                 </div>
 
-                <div className="flex bg-luxury-secondary p-1 border border-black/5 rounded-sm">
-                    <button
-                        onClick={() => setActiveTab("reservations")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "reservations" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
-                    >
-                        Réservations
-                    </button>
-                    <button
-                        onClick={() => setActiveTab("prestations")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "prestations" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
-                    >
-                        Prestations
-                    </button>
-                    <button
-                        onClick={() => setActiveTab("videos")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "videos" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
-                    >
-                        Vidéos
-                    </button>
-                    <button
-                        onClick={() => setActiveTab("vitrine")}
-                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "vitrine" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
-                    >
-                        Vitrine
-                    </button>
-                </div>
+                <button
+                    onClick={() => setActiveTab("reservations")}
+                    className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "reservations" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
+                >
+                    Réservations
+                </button>
+                <button
+                    onClick={() => setActiveTab("videos")}
+                    className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "videos" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
+                >
+                    Vidéos
+                </button>
             </div>
 
             {/* TAB: RESERVATIONS */}
@@ -318,100 +216,6 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* TAB: PRESTATIONS */}
-            {activeTab === "prestations" && (
-                <div className="space-y-12">
-                    {/* Formulaire d'ajout */}
-                    <div className="premium-card bg-luxury-secondary/20 border-black/5">
-                        <div className="flex items-center gap-3 mb-8">
-                            <Plus className="text-luxury-gold" size={20} />
-                            <h2 className="text-lg font-display uppercase tracking-wider text-black">Ajouter une Prestation</h2>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Nom du Service</label>
-                                <input
-                                    className="w-full bg-white border border-black/10 px-4 py-3 text-sm focus:border-luxury-gold outline-none text-black transition-all"
-                                    placeholder="Ex: Soin des Cheveux"
-                                    value={newItem.title}
-                                    onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Catégorie</label>
-                                <select
-                                    className="w-full bg-white border border-black/10 px-4 py-3 text-sm focus:border-luxury-gold outline-none text-black transition-all appearance-none"
-                                    value={newItem.category}
-                                    onChange={(e) => setNewItem({ ...newItem, category: e.target.value })}
-                                >
-                                    <option>Soin des Cheveux</option>
-                                    <option>Soin des Perruques</option>
-                                    <option>Conception sur Mesure</option>
-                                    <option>Pose de Perruque</option>
-                                    <option>Autre</option>
-                                </select>
-                            </div>
-                            <div className="space-y-2 md:col-span-2">
-                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Image de la Prestation</label>
-                                <div className="flex gap-4">
-                                    <label className="flex-1 cursor-pointer bg-white border border-black/10 px-4 py-3 text-sm text-luxury-gray flex items-center justify-between hover:border-luxury-gold transition-all">
-                                        <span>{newItem.image ? "Image sélectionnée" : "Uploader une image"}</span>
-                                        <Upload size={16} className="text-luxury-gold" />
-                                        <input type="file" className="hidden" accept="image/*" onChange={handleImageUpload} />
-                                    </label>
-                                    <div className="flex gap-2">
-                                        <Button onClick={addItem} className="px-8 whitespace-nowrap">Ajouter</Button>
-                                        <Button variant="outline" onClick={() => setNewItem({ title: "", category: "Soin des Cheveux", image: "", description: "" })} className="p-3">
-                                            <X size={16} />
-                                        </Button>
-                                    </div>
-                                </div>
-                                {newItem.image && <p className="text-[9px] text-green-600 font-medium">Image locale prête</p>}
-                            </div>
-                            <div className="space-y-2 md:col-span-4">
-                                <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Description</label>
-                                <textarea
-                                    className="w-full bg-white border border-black/10 px-4 py-3 text-sm focus:border-luxury-gold outline-none text-black transition-all resize-none"
-                                    rows={2}
-                                    placeholder="Décrivez les détails du service..."
-                                    value={newItem.description}
-                                    onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Grille des articles */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-                        {collectionItems.map((item) => (
-                            <motion.div
-                                key={item.id}
-                                layout
-                                className="group relative bg-white border border-black/5 overflow-hidden"
-                            >
-                                <div className="aspect-[4/5] overflow-hidden bg-luxury-secondary">
-                                    <img src={item.image} alt={item.title} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                                </div>
-                                <div className="p-4 border-t border-black/5">
-                                    <div className="flex items-start justify-between">
-                                        <div>
-                                            <p className="text-[10px] uppercase tracking-widest text-luxury-gold font-bold mb-1">{item.category}</p>
-                                            <h3 className="text-sm font-display uppercase tracking-wide text-black mb-1">{item.title}</h3>
-                                            <p className="text-[10px] text-luxury-gray line-clamp-2 italic">{item.description}</p>
-                                        </div>
-                                        <button
-                                            onClick={() => deleteItem(item.id)}
-                                            className="text-black/10 hover:text-red-500 transition-colors p-2"
-                                        >
-                                            <Trash2 size={14} />
-                                        </button>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            )}
 
             {/* TAB: VIDEOS */}
             {activeTab === "videos" && (
@@ -488,68 +292,6 @@ export default function AdminDashboard() {
                 </div>
             )}
 
-            {/* TAB: VITRINE */}
-            {activeTab === "vitrine" && (
-                <div className="space-y-12">
-                    <div className="premium-card bg-white border-black/10">
-                        <div className="flex items-center gap-3 mb-8">
-                            <LayoutGrid className="text-luxury-gold" size={20} />
-                            <h2 className="text-lg font-display uppercase tracking-wider text-black">Configuration de la Vitrine (Landing Page)</h2>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {showcaseItems.map((item) => (
-                                <div key={item.id} className="space-y-6 p-6 bg-luxury-secondary/30 border border-black/5 rounded-sm">
-                                    <div className="flex items-center justify-between">
-                                        <span className="text-[10px] uppercase tracking-widest font-bold text-luxury-gold">Cadre {item.id}</span>
-                                    </div>
-
-                                    <div className="aspect-[3/4] relative bg-white border border-black/5 overflow-hidden group">
-                                        {item.image ? (
-                                            <img src={item.image} alt="" className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-luxury-gray/30 italic text-[10px]">Aucune image</div>
-                                        )}
-                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
-                                            <Upload className="text-white" size={24} />
-                                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleShowcaseUpload(e, item.id)} />
-                                        </label>
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Titre</label>
-                                            <input
-                                                className="w-full bg-white border border-black/10 px-4 py-2 text-xs focus:border-luxury-gold outline-none text-black transition-all"
-                                                value={item.title}
-                                                onChange={(e) => {
-                                                    const updated = showcaseItems.map(si => si.id === item.id ? { ...si, title: e.target.value } : si);
-                                                    setShowcaseItems(updated);
-                                                }}
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Sous-titre</label>
-                                            <input
-                                                className="w-full bg-white border border-black/10 px-4 py-2 text-xs focus:border-luxury-gold outline-none text-black transition-all"
-                                                value={item.subtitle}
-                                                onChange={(e) => {
-                                                    const updated = showcaseItems.map(si => si.id === item.id ? { ...si, subtitle: e.target.value } : si);
-                                                    setShowcaseItems(updated);
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-
-                        <div className="mt-12 flex justify-end">
-                            <Button onClick={saveShowcase} className="px-12 py-4 tracking-widest">Enregistrer la Vitrine</Button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }

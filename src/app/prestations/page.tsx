@@ -4,40 +4,19 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
 import { Phone } from "lucide-react";
-import { getMedia } from "@/lib/media-db";
-
 const DEFAULT_PRESTATIONS = [
-    { id: 1, nom: "Soin des Cheveux", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels.", image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800", categorie: "SOINS" },
-    { id: 2, nom: "Soin des Perruques", description: "Entretien complet et revitalisation pour préserver la beauté de vos fibres.", image: "https://images.unsplash.com/photo-1620331311520-246422fd82f9?auto=format&fit=crop&q=80&w=800", categorie: "ENTRETIEN" },
-    { id: 3, nom: "Conception sur Mesure", description: "Création artisanale unique, adaptée à vos mesures et à votre style.", image: "https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?auto=format&fit=crop&q=80&w=800", categorie: "CRÉATION" },
-    { id: 4, nom: "Pose de Perruque", description: "Installation professionnelle pour un rendu naturel et une fixation parfaite.", image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800", categorie: "POSE" },
+    { id: 1, nom: "Soin des Cheveux", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels.", image: "/assets/images/prestations/soin-cheveux.jpg", categorie: "SOINS" },
+    { id: 2, nom: "Soin des Perruques", description: "Entretien complet et revitalisation pour préserver la beauté de vos fibres.", image: "/assets/images/prestations/soin-perruques.jpg", categorie: "ENTRETIEN" },
+    { id: 3, nom: "Conception sur Mesure", description: "Création artisanale unique, adaptée à vos mesures et à votre style.", image: "/assets/images/prestations/conception.jpg", categorie: "CRÉATION" },
+    { id: 4, nom: "Pose de Perruque", description: "Installation professionnelle pour un rendu naturel et une fixation parfaite.", image: "/assets/images/prestations/pose.jpg", categorie: "POSE" },
+    { id: 5, nom: "Mèches Brutes", description: "Sélection de cheveux 100% naturels pour une texture et une brillance pure.", image: "/assets/images/prestations/meches-brutes.jpg", categorie: "AUTRES" },
 ];
 
 export default function Prestations() {
-    const [bgVideo, setBgVideo] = useState("/assets/videos/prestations-bg.mp4");
-    const [items, setItems] = useState(DEFAULT_PRESTATIONS);
+    const [bgVideo] = useState("/assets/videos/prestations-bg.mp4");
+    const [items] = useState(DEFAULT_PRESTATIONS);
 
-    useEffect(() => {
-        const loadContent = async () => {
-            // Load custom background video
-            const blob = await getMedia("collection_bg");
-            if (blob) setBgVideo(URL.createObjectURL(blob));
-
-            // Load items
-            const savedItems = localStorage.getItem("hair_club_collection_items");
-            if (savedItems) {
-                const parsed = JSON.parse(savedItems);
-                if (parsed.length > 0) {
-                    const hydrated = await Promise.all(parsed.map(async (item: any) => {
-                        const blob = await getMedia(`item_${item.id}`);
-                        return blob ? { ...item, image: URL.createObjectURL(blob) } : item;
-                    }));
-                    setItems(hydrated);
-                }
-            }
-        };
-        loadContent();
-    }, []);
+    // Dynamic loading removed to prioritize performance and global consistency
 
     return (
         <div className="min-h-screen bg-white">

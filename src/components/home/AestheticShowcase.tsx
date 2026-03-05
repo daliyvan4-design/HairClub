@@ -2,48 +2,31 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import { getMedia } from "@/lib/media-db";
-
 const DEFAULT_SHOWCASE = [
     {
         id: 1,
         title: "Mèches Premium",
         subtitle: "Sélection Rare",
-        image: "https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?auto=format&fit=crop&q=80&w=800",
+        image: "/assets/images/showcase/frame-1.jpg",
     },
     {
         id: 2,
         title: "L'Art du Sur-Mesure",
         subtitle: "Confection Elite",
-        image: "https://images.unsplash.com/photo-1522337360788-8b13df772ce5?auto=format&fit=crop&q=80&w=800",
+        image: "/assets/images/showcase/frame-2.jpg",
     },
     {
         id: 3,
         title: "Éclat & Pureté",
-        subtitle: "Qualité Ultime",
-        image: "https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&q=80&w=800",
+        subtitle: "Qualité Irréprochable",
+        image: "/assets/images/showcase/frame-3.jpg",
     },
 ];
 
 export function AestheticShowcase() {
-    const [items, setItems] = useState(DEFAULT_SHOWCASE);
+    const [items] = useState(DEFAULT_SHOWCASE);
 
-    useEffect(() => {
-        const loadShowcase = async () => {
-            const saved = localStorage.getItem("hair_club_showcase");
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                const hydrated = await Promise.all(
-                    parsed.map(async (item: any) => {
-                        const blob = await getMedia(`showcase_${item.id}`);
-                        return blob ? { ...item, image: URL.createObjectURL(blob) } : item;
-                    })
-                );
-                setItems(hydrated);
-            }
-        };
-        loadShowcase();
-    }, []);
+    // Dynamic loading removed to prioritize global performance
 
     return (
         <section className="py-24 px-6 bg-white overflow-hidden">
