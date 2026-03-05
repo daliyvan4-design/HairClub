@@ -2,6 +2,7 @@ import { Hero } from "@/components/home/Hero";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 import { Sparkles, Scissors, ShoppingBag } from "lucide-react";
+import { AestheticShowcase } from "@/components/home/AestheticShowcase";
 
 const specialties = [
   {
@@ -62,6 +63,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* NEW: Aesthetic Showcase */}
+      <AestheticShowcase />
 
       {/* CTA Section */}
       <section className="py-32 px-6 relative overflow-hidden bg-white">

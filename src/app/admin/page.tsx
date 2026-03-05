@@ -31,8 +31,13 @@ export default function AdminDashboard() {
     const [collectionVideo, setCollectionVideo] = useState("");
     const [collectionItems, setCollectionItems] = useState<CollectionItem[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
-    const [activeTab, setActiveTab] = useState<"reservations" | "prestations" | "videos">("reservations");
+    const [activeTab, setActiveTab] = useState<"reservations" | "prestations" | "videos" | "vitrine">("reservations");
     const [resTab, setResTab] = useState<"pending" | "confirmed">("pending");
+    const [showcaseItems, setShowcaseItems] = useState([
+        { id: 1, title: "", subtitle: "", image: "" },
+        { id: 2, title: "", subtitle: "", image: "" },
+        { id: 3, title: "", subtitle: "", image: "" },
+    ]);
 
     // New item form state
     const [newItem, setNewItem] = useState({ title: "", category: "Mèches Brutes", image: "", description: "" });
@@ -67,6 +72,18 @@ export default function AdminDashboard() {
                 return blob ? { ...item, image: URL.createObjectURL(blob) } : item;
             }));
             setCollectionItems(hydratedItems);
+
+            const savedShowcase = localStorage.getItem("hair_club_showcase");
+            const showcaseData = savedShowcase ? JSON.parse(savedShowcase) : [
+                { id: 1, title: "Mèches Premium", subtitle: "Sélection Rare", image: "" },
+                { id: 2, title: "L'Art du Sur-Mesure", subtitle: "Confection Elite", image: "" },
+                { id: 3, title: "Éclat & Pureté", subtitle: "Qualité Ultime", image: "" },
+            ];
+            const hydratedShowcase = await Promise.all(showcaseData.map(async (item: any) => {
+                const blob = await getMedia(`showcase_${item.id}`);
+                return blob ? { ...item, image: URL.createObjectURL(blob) } : item;
+            }));
+            setShowcaseItems(hydratedShowcase);
 
             setIsLoaded(true);
         };
@@ -145,6 +162,22 @@ export default function AdminDashboard() {
         setNewItem({ title: "", category: "Soin des Cheveux", image: "", description: "" });
     };
 
+    const handleShowcaseUpload = async (e: React.ChangeEvent<HTMLInputElement>, id: number) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        const updated = showcaseItems.map(item =>
+            item.id === id ? { ...item, image: url } : item
+        );
+        setShowcaseItems(updated);
+        await saveMedia(`showcase_${id}`, file);
+    };
+
+    const saveShowcase = () => {
+        localStorage.setItem("hair_club_showcase", JSON.stringify(showcaseItems));
+        alert("Vitrine mise à jour !");
+    };
+
     if (!isLoaded) return null;
 
     const filteredBookings = bookings.filter(b =>
@@ -188,6 +221,12 @@ export default function AdminDashboard() {
                         className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "videos" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
                     >
                         Vidéos
+                    </button>
+                    <button
+                        onClick={() => setActiveTab("vitrine")}
+                        className={cn("px-6 py-2 text-[10px] uppercase tracking-widest transition-all", activeTab === "vitrine" ? "bg-white text-luxury-gold shadow-sm font-bold" : "text-luxury-gold opacity-50 hover:opacity-100")}
+                    >
+                        Vitrine
                     </button>
                 </div>
             </div>
@@ -442,6 +481,69 @@ export default function AdminDashboard() {
                                     setCollectionVideo("/assets/videos/prestations-bg.mp4");
                                 }} className="px-8">Réinitialiser</Button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* TAB: VITRINE */}
+            {activeTab === "vitrine" && (
+                <div className="space-y-12">
+                    <div className="premium-card bg-white border-black/10">
+                        <div className="flex items-center gap-3 mb-8">
+                            <LayoutGrid className="text-luxury-gold" size={20} />
+                            <h2 className="text-lg font-display uppercase tracking-wider text-black">Configuration de la Vitrine (Landing Page)</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            {showcaseItems.map((item) => (
+                                <div key={item.id} className="space-y-6 p-6 bg-luxury-secondary/30 border border-black/5 rounded-sm">
+                                    <div className="flex items-center justify-between">
+                                        <span className="text-[10px] uppercase tracking-widest font-bold text-luxury-gold">Cadre {item.id}</span>
+                                    </div>
+
+                                    <div className="aspect-[3/4] relative bg-white border border-black/5 overflow-hidden group">
+                                        {item.image ? (
+                                            <img src={item.image} alt="" className="w-full h-full object-cover" />
+                                        ) : (
+                                            <div className="w-full h-full flex items-center justify-center text-luxury-gray/30 italic text-[10px]">Aucune image</div>
+                                        )}
+                                        <label className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+                                            <Upload className="text-white" size={24} />
+                                            <input type="file" className="hidden" accept="image/*" onChange={(e) => handleShowcaseUpload(e, item.id)} />
+                                        </label>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Titre</label>
+                                            <input
+                                                className="w-full bg-white border border-black/10 px-4 py-2 text-xs focus:border-luxury-gold outline-none text-black transition-all"
+                                                value={item.title}
+                                                onChange={(e) => {
+                                                    const updated = showcaseItems.map(si => si.id === item.id ? { ...si, title: e.target.value } : si);
+                                                    setShowcaseItems(updated);
+                                                }}
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] uppercase tracking-widest text-luxury-gray block">Sous-titre</label>
+                                            <input
+                                                className="w-full bg-white border border-black/10 px-4 py-2 text-xs focus:border-luxury-gold outline-none text-black transition-all"
+                                                value={item.subtitle}
+                                                onChange={(e) => {
+                                                    const updated = showcaseItems.map(si => si.id === item.id ? { ...si, subtitle: e.target.value } : si);
+                                                    setShowcaseItems(updated);
+                                                }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-12 flex justify-end">
+                            <Button onClick={saveShowcase} className="px-12 py-4 tracking-widest">Enregistrer la Vitrine</Button>
                         </div>
                     </div>
                 </div>
