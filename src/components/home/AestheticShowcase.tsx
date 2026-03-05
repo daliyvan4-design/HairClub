@@ -7,19 +7,19 @@ const DEFAULT_SHOWCASE = [
         id: 1,
         title: "Mèches Premium",
         subtitle: "Sélection Rare",
-        image: "/assets/images/showcase/frame-1.jpg",
+        image: "/assets/images/showcase/frame-1.JPG",
     },
     {
         id: 2,
         title: "L'Art du Sur-Mesure",
         subtitle: "Confection Elite",
-        image: "/assets/images/showcase/frame-2.jpg",
+        image: "/assets/images/showcase/frame-2.JPG",
     },
     {
         id: 3,
         title: "Éclat & Pureté",
         subtitle: "Qualité Irréprochable",
-        image: "/assets/images/showcase/frame-3.jpg",
+        image: "/assets/images/showcase/frame-3.JPG",
     },
 ];
 
