@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { CheckCircle, Clock, Trash2, ShieldCheck, Plus, LayoutGrid, Video, Users, PhoneCall, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface Booking {
@@ -16,14 +17,33 @@ interface Booking {
 }
 
 import { saveMedia, getMedia, deleteMedia } from "@/lib/media-db";
+import { verifyPassword } from "./actions";
 
 export default function AdminDashboard() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [passwordInput, setPasswordInput] = useState("");
+    const [loginError, setLoginError] = useState(false);
+
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [heroVideos, setHeroVideos] = useState<string[]>([]);
     const [collectionVideo, setCollectionVideo] = useState("");
     const [isLoaded, setIsLoaded] = useState(false);
     const [activeTab, setActiveTab] = useState<"reservations" | "videos">("reservations");
     const [resTab, setResTab] = useState<"pending" | "confirmed">("pending");
+
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        const isValid = await verifyPassword(passwordInput);
+        
+        if (isValid) {
+            setIsAuthenticated(true);
+            setLoginError(false);
+        } else {
+            setLoginError(true);
+            setPasswordInput("");
+        }
+    };
 
     useEffect(() => {
         const loadAll = async () => {
@@ -94,6 +114,38 @@ export default function AdminDashboard() {
 
     if (!isLoaded) return null;
 
+    if (!isAuthenticated) {
+        return (
+            <div className="pt-32 pb-24 px-6 max-w-lg mx-auto min-h-screen bg-white flex flex-col items-center justify-center">
+                <Image src="/logohair.png" alt="Logo" width={80} height={80} className="mb-8" />
+                <div className="w-full premium-card bg-luxury-secondary/10 border-black/10 p-8 text-center">
+                    <ShieldCheck size={32} className="mx-auto text-luxury-gold mb-4" />
+                    <h1 className="text-2xl font-display uppercase tracking-widest text-black mb-2">Accès Restreint</h1>
+                    <p className="text-sm text-luxury-gray mb-8">Veuillez entrer le mot de passe administrateur pour accéder au tableau de bord.</p>
+                    
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <div>
+                            <input 
+                                type="password" 
+                                value={passwordInput}
+                                onChange={(e) => setPasswordInput(e.target.value)}
+                                placeholder="Mot de passe"
+                                className="w-full px-4 py-3 bg-white border border-black/10 focus:border-luxury-gold focus:ring-1 focus:ring-luxury-gold outline-none transition-all text-center text-black"
+                                required
+                            />
+                            {loginError && (
+                                <p className="text-red-500 text-xs mt-2 font-medium">Mot de passe incorrect.</p>
+                            )}
+                        </div>
+                        <Button type="submit" className="w-full py-4 tracking-widest">
+                            SE CONNECTER
+                        </Button>
+                    </form>
+                </div>
+            </div>
+        );
+    }
+
     const filteredBookings = bookings.filter(b =>
         resTab === "pending" ? b.status === "En attente" : b.status === "Confirmé"
     ).sort((a, b) => b.id - a.id);
@@ -110,7 +162,7 @@ export default function AdminDashboard() {
                         </div>
                     </div>
                     <div className="flex items-center gap-6 mb-2">
-                        <img src="/logohair.png" alt="Logo" className="h-16 w-auto" />
+                        <Image src="/logohair.png" alt="Logo" width={64} height={64} className="h-16 w-auto object-contain" />
                         <h1 className="text-4xl md:text-5xl font-display font-medium uppercase tracking-tighter text-black">
                             Hair Club — <span className="text-luxury-gold italic">Dashboard</span>
                         </h1>

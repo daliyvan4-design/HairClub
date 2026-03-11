@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 
@@ -39,15 +40,15 @@ export function Navbar() {
         >
             <div className="max-w-7xl mx-auto flex items-center justify-between">
                 <Link href="/" className="relative h-20 w-40 flex items-center">
-                    <img
-                        src="/logohair.png"
-                        alt="HAIR CLUB"
-                        className="h-full w-full object-contain"
-                        onError={(e) => {
-                            (e.target as any).style.display = 'none';
-                            (e.target as any).nextSibling.style.display = 'block';
-                        }}
-                    />
+                    <div className="relative h-20 w-40">
+                        <Image
+                            src="/logohair.png"
+                            alt="HAIR CLUB"
+                            fill
+                            className="object-contain"
+                            priority
+                        />
+                    </div>
                     <span style={{ display: 'none' }} className="text-2xl font-display font-bold tracking-tighter text-luxury-gold">
                         HAIR CLUB<span className="text-black">.</span>
                     </span>

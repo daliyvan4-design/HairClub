@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import Image from "next/image";
 import { Phone } from "lucide-react";
 const DEFAULT_PRESTATIONS = [
     { id: 1, nom: "Soin des Cheveux", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels.", image: "/assets/images/prestations/soin-cheveux.jpg", categorie: "SOINS" },
@@ -21,21 +22,17 @@ export default function Prestations() {
     return (
         <div className="min-h-screen bg-white">
             {/* Video Header Section */}
-            <div className="relative h-[60vh] w-full overflow-hidden flex items-center justify-center">
+            <div className="relative h-[60vh] w-full overflow-hidden flex items-center justify-center bg-black">
                 <video
                     autoPlay
                     muted
                     loop
                     playsInline
                     preload="auto"
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover opacity-70"
                     src={bgVideo}
-                    onError={(e) => {
-                        // Fallback opacity if video fails
-                        (e.target as any).style.display = 'none';
-                    }}
                 />
-                <div className="absolute inset-0 bg-black/30" />
+                <div className="absolute inset-0 bg-black/20" />
 
                 <div className="relative z-10 text-center animate-premium px-6">
                     <h1 className="text-5xl md:text-8xl font-display font-medium mb-4 uppercase tracking-tighter text-white drop-shadow-lg">
@@ -59,10 +56,14 @@ export default function Prestations() {
                             className="group relative flex flex-col bg-white border border-black/5 shadow-sm hover:shadow-2xl transition-all duration-700"
                         >
                             <div className="relative aspect-video overflow-hidden">
-                                <img
+                                <Image
                                     src={item.image}
                                     alt={item.nom || (item as any).title}
+                                    width={800}
+                                    height={450}
+                                    priority={i < 2}
                                     className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 group-active:scale-110 grayscale group-hover:grayscale-0 group-active:grayscale-0"
+                                    sizes="(max-width: 768px) 100vw, 50vw"
                                 />
                                 <div className="absolute top-4 left-4 size-fit bg-black/80 backdrop-blur-md px-3 py-1">
                                     <span className="text-[10px] text-luxury-gold uppercase tracking-widest font-bold">

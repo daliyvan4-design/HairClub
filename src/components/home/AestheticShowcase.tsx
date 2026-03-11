@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 const DEFAULT_SHOWCASE = [
     {
         id: 1,
@@ -41,10 +42,13 @@ export function AestheticShowcase() {
                             transition={{ delay: i * 0.2, duration: 0.8 }}
                             className="group relative aspect-[3/4] overflow-hidden bg-luxury-secondary rounded-sm shadow-xl"
                         >
-                            <img
+                            <Image
                                 src={item.image}
                                 alt={item.title}
+                                width={800}
+                                height={1067}
                                 className="w-full h-full object-cover grayscale transition-all duration-1000 group-hover:grayscale-0 group-hover:scale-110 group-active:grayscale-0 group-active:scale-110"
+                                sizes="(max-width: 768px) 100vw, 33vw"
                             />
                             <div className="absolute inset-x-0 bottom-0 p-8 bg-gradient-to-t from-black/80 via-black/20 to-transparent transform translate-y-4 group-hover:translate-y-0 group-active:translate-y-0 transition-transform duration-500">
                                 <span className="text-luxury-gold text-[10px] uppercase tracking-[0.3em] font-bold mb-2 block opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-700 delay-100">
