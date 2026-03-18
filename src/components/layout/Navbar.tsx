@@ -27,7 +27,7 @@ export function Navbar() {
     // ONLY 3 links here. Réserver is ONLY in the Button below.
     const navLinks = [
         { name: "Accueil", href: "/" },
-        { name: "Nos Prestations", href: "/prestations" },
+        { name: "Tarifs", href: "/prestations" },
         { name: "Contact", href: "/contact" },
     ];
 

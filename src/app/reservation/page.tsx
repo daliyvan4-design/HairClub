@@ -12,11 +12,20 @@ export default function Reservation() {
         date: "",
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [quotaError, setQuotaError] = useState(false);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        // Simulate booking storage
+        // Check Quota
         const bookings = JSON.parse(localStorage.getItem("hair_club_bookings") || "[]");
+        const reservationsForDate = bookings.filter((b: any) => b.date === formData.date);
+
+        if (reservationsForDate.length >= 5) {
+            setQuotaError(true);
+            return;
+        }
+
+        setQuotaError(false);
         bookings.push({ ...formData, id: Date.now(), status: "En attente" });
         localStorage.setItem("hair_club_bookings", JSON.stringify(bookings));
 
@@ -91,13 +100,24 @@ export default function Reservation() {
                         type="date"
                         className="w-full bg-transparent border-b border-black/10 py-4 focus:outline-none focus:border-luxury-gold transition-all text-lg font-light text-black accent-luxury-gold [color-scheme:light]"
                         value={formData.date}
-                        onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                        onChange={(e) => {
+                            setFormData({ ...formData, date: e.target.value });
+                            setQuotaError(false);
+                        }}
                         style={{
                             WebkitCalendarPickerIndicator: {
                                 filter: 'invert(58%) sepia(34%) saturate(714%) hue-rotate(3deg) brightness(92%) contrast(85%)',
                             }
                         } as any}
                     />
+                    {quotaError && (
+                        <motion.p 
+                            initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }}
+                            className="text-red-500 text-[10px] font-bold uppercase tracking-widest mt-2"
+                        >
+                            Le quota de 5 réservations a été atteint pour cette journée.
+                        </motion.p>
+                    )}
                 </div>
 
                 <div className="pt-8 text-center">

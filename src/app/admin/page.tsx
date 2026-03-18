@@ -150,6 +150,11 @@ export default function AdminDashboard() {
         resTab === "pending" ? b.status === "En attente" : b.status === "Confirmé"
     ).sort((a, b) => b.id - a.id);
 
+    const dateCounts = bookings.reduce((acc, booking) => {
+        acc[booking.date] = (acc[booking.date] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+
     return (
         <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto min-h-screen bg-white">
             {/* Header */}
@@ -237,7 +242,14 @@ export default function AdminDashboard() {
                                                     {booking.telephone}
                                                 </a>
                                             </td>
-                                            <td className="px-6 py-5 text-luxury-gray text-sm">{booking.date}</td>
+                                            <td className="px-6 py-5 text-luxury-gray text-sm">
+                                                {booking.date}
+                                                {dateCounts[booking.date] >= 5 && (
+                                                    <span className="block mt-1 text-red-500 text-[10px] font-bold uppercase tracking-widest bg-red-500/10 px-2 py-1 rounded-sm w-fit">
+                                                        Quota Atteint
+                                                    </span>
+                                                )}
+                                            </td>
                                             <td className="px-6 py-5">
                                                 <div className="flex items-center justify-end gap-3">
                                                     <button

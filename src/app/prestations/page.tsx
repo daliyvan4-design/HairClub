@@ -1,104 +1,135 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
-import Image from "next/image";
 import { Phone } from "lucide-react";
-const DEFAULT_PRESTATIONS = [
-    { id: 1, nom: "Soin des Cheveux", description: "Rituels profonds pour restaurer l'éclat et la force de vos cheveux naturels.", image: "/assets/images/prestations/soin-cheveux.jpg", categorie: "SOINS" },
-    { id: 2, nom: "Soin des Perruques", description: "Entretien complet et revitalisation pour préserver la beauté de vos fibres.", image: "/assets/images/prestations/soin-perruques.jpg", categorie: "ENTRETIEN" },
-    { id: 3, nom: "Conception sur Mesure", description: "Création artisanale unique, adaptée à vos mesures et à votre style.", image: "/assets/images/prestations/conception.jpg", categorie: "CRÉATION" },
-    { id: 4, nom: "Pose de Perruque", description: "Installation professionnelle pour un rendu naturel et une fixation parfaite.", image: "/assets/images/prestations/pose.jpg", categorie: "POSE" },
-    { id: 5, nom: "Mèches Brutes", description: "Sélection de cheveux 100% naturels pour une texture et une brillance pure.", image: "/assets/images/prestations/meches-brutes.jpg", categorie: "AUTRES" },
+
+interface Service {
+    nom: string;
+    prix: string;
+}
+
+const SERVICES: Service[] = [
+    { nom: "Shampoing simple", prix: "10 000 F" },
+    { nom: "Shampoing simple + defaire les cheveux", prix: "15 000 F" },
+    { nom: "Soins de meche", prix: "15 000 F" },
+    { nom: "Bain d’huile", prix: "20 000 F" },
+    { nom: "Pose closure sans colle", prix: "10 000 F" },
+    { nom: "Pose closure avec colle", prix: "15 000 F" },
+    { nom: "Pose frontale sans colle", prix: "15 000 F" },
+    { nom: "Pose frontale avec colle", prix: "20 000 F" },
+    { nom: "Blanchiment, Customisation & Pose frontale", prix: "35 000 F" },
+    { nom: "Blanchiment & Customisation frontale", prix: "15 000 F" },
+    { nom: "Blanchiment de closure", prix: "10 000 F" },
+    { nom: "Confection de frontal + Blanchiment", prix: "20 000 F" },
+    { nom: "Customisation de closure + Blanchiment", prix: "15 000 F" },
+    { nom: "Confection + Blanchiment + Customisation", prix: "30 000 F" },
+    { nom: "Customisation", prix: "15 000 F" },
+    { nom: "Boucle grossi", prix: "10 000 F" },
+    { nom: "Boucle Hollywoodienne", prix: "15 000 F" },
+    { nom: "Mise en forme", prix: "10 000 F" },
+    { nom: "Brushing", prix: "10 000 F" },
+    { nom: "Brushing + Lissage", prix: "15 000 F" },
+    { nom: "Customisation à la naïja", prix: "À partir de 20 000 F" },
 ];
 
 export default function Prestations() {
     const [bgVideo] = useState("/assets/videos/prestations-bg.mp4");
-    const [items] = useState(DEFAULT_PRESTATIONS);
-
-    // Dynamic loading removed to prioritize performance and global consistency
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-[#fafafa]">
             {/* Video Header Section */}
-            <div className="relative h-[60vh] w-full overflow-hidden flex items-center justify-center bg-black">
+            <div className="relative h-[50vh] w-full overflow-hidden flex items-center justify-center bg-black">
                 <video
                     autoPlay
                     muted
                     loop
                     playsInline
                     preload="auto"
-                    className="absolute inset-0 w-full h-full object-cover opacity-70"
+                    className="absolute inset-0 w-full h-full object-cover opacity-[0.35] grayscale"
                     src={bgVideo}
                 />
-                <div className="absolute inset-0 bg-black/20" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/40 to-black/90 mix-blend-multiply" />
 
-                <div className="relative z-10 text-center animate-premium px-6">
-                    <h1 className="text-5xl md:text-8xl font-display font-medium mb-4 uppercase tracking-tighter text-white drop-shadow-lg">
-                        Nos <span className="text-luxury-gold italic">Prestations</span>
-                    </h1>
-                    <p className="text-white/80 text-xs uppercase tracking-[0.4em] max-w-xl mx-auto font-light drop-shadow-md">
-                        L'art de la distinction capillaire par Hair Club
-                    </p>
+                <div className="relative z-10 text-center animate-premium px-6 mt-16">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                    >
+                        <h1 className="text-5xl md:text-8xl font-display font-medium mb-6 uppercase tracking-tighter text-white drop-shadow-2xl">
+                            Nos <span className="text-luxury-gold italic">Tarifs</span>
+                        </h1>
+                        <p className="text-luxury-gold text-[10px] md:text-xs uppercase tracking-[0.4em] md:tracking-[0.6em] max-w-xl mx-auto font-bold opacity-90">
+                            Prestations & L'art de la distinction
+                        </p>
+                    </motion.div>
                 </div>
             </div>
 
-            <div className="py-24 px-6 max-w-7xl mx-auto">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    {items.map((item, i) => (
-                        <motion.div
-                            key={item.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: i * 0.1, duration: 0.8 }}
-                            className="group relative flex flex-col bg-white border border-black/5 shadow-sm hover:shadow-2xl transition-all duration-700"
-                        >
-                            <div className="relative aspect-video overflow-hidden">
-                                <Image
-                                    src={item.image}
-                                    alt={item.nom || (item as any).title}
-                                    width={800}
-                                    height={450}
-                                    priority={i < 2}
-                                    className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-110 group-active:scale-110 grayscale group-hover:grayscale-0 group-active:grayscale-0"
-                                    sizes="(max-width: 768px) 100vw, 50vw"
-                                />
-                                <div className="absolute top-4 left-4 size-fit bg-black/80 backdrop-blur-md px-3 py-1">
-                                    <span className="text-[10px] text-luxury-gold uppercase tracking-widest font-bold">
-                                        {item.categorie || (item as any).category}
-                                    </span>
-                                </div>
-                            </div>
+            <div className="py-24 px-6 max-w-5xl mx-auto">
+                {/* Menu Design */}
+                <div className="bg-white px-8 py-16 md:p-20 shadow-2xl shadow-black/[0.03] border border-black/[0.05] relative overflow-hidden">
+                    {/* Decorative Background Elements */}
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-luxury-gold/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+                    <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/5 blur-3xl rounded-full -translate-x-1/2 translate-y-1/2 pointer-events-none" />
 
-                            <div className="p-10 flex flex-col flex-1">
-                                <h3 className="text-2xl font-display uppercase tracking-widest mb-4 text-black">
-                                    {item.nom || (item as any).title}
-                                </h3>
-                                <p className="text-luxury-gray text-sm leading-relaxed font-light mb-8 flex-1 italic">
-                                    {item.description}
-                                </p>
-                                <a href="tel:+2250170434143" className="block mt-auto">
-                                    <Button className="w-full bg-luxury-gold hover:bg-black text-white py-6 flex items-center justify-center gap-3 transition-all duration-500 shadow-xl shadow-luxury-gold/20 font-bold tracking-[0.2em] uppercase text-[10px]">
-                                        <Phone size={16} />
-                                        Contactez-nous
-                                    </Button>
-                                </a>
-                            </div>
-                        </motion.div>
-                    ))}
-                </div>
+                    <div className="text-center mb-16 relative z-10">
+                        <h2 className="text-3xl font-display uppercase tracking-[0.15em] text-black mb-4">
+                            Carte des <span className="text-luxury-gold italic">Services</span>
+                        </h2>
+                        <div className="h-px bg-gradient-to-r from-transparent via-luxury-gold/50 to-transparent w-32 mx-auto" />
+                    </div>
 
-                <div className="mt-24 text-center border-t border-black/5 pt-16">
-                    <h2 className="text-2xl md:text-4xl font-display uppercase tracking-tighter text-black mb-8">
-                        Une envie <span className="text-luxury-gold italic">particulière ?</span>
-                    </h2>
-                    <a href="/contact">
-                        <Button variant="outline" className="px-16 py-4 text-[10px] tracking-widest uppercase border-luxury-gold text-luxury-gold hover:bg-luxury-gold hover:text-white transition-all">
-                            Demander un devis
-                        </Button>
-                    </a>
+                    <div className="space-y-6 relative z-10">
+                        {SERVICES.map((item, i) => (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 10 }}
+                                whileInView={{ opacity: 1, y: 0 }}
+                                viewport={{ once: true }}
+                                transition={{ delay: i * 0.05, duration: 0.5 }}
+                                className="group flex items-end justify-between hover:bg-black/[0.02] p-2 -mx-2 rounded-sm transition-colors duration-300"
+                            >
+                                <span className="text-sm md:text-base font-medium text-black uppercase tracking-wide">
+                                    {item.nom}
+                                </span>
+                                
+                                <div className="flex-grow border-b-2 border-dotted border-black/10 mx-4 mb-[6px] group-hover:border-luxury-gold/40 transition-colors duration-300" />
+                                
+                                <span className="text-sm md:text-base font-bold text-luxury-gold whitespace-nowrap">
+                                    {item.prix}
+                                </span>
+                            </motion.div>
+                        ))}
+                    </div>
+
+                    {/* Footer Contact */}
+                    <motion.div 
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.5, duration: 1 }}
+                        className="mt-20 pt-16 border-t border-black/[0.08] text-center relative z-10"
+                    >
+                        <p className="text-luxury-gray text-xs uppercase tracking-widest font-light mb-8 max-w-lg mx-auto leading-relaxed">
+                            Pour toute demande sur mesure ou pour réserver votre séance, notre équipe est à votre disposition.
+                        </p>
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+                            <a href="tel:+2250170434143">
+                                <Button className="bg-luxury-gold hover:bg-black text-white px-10 py-6 flex items-center justify-center gap-3 transition-all duration-500 shadow-xl shadow-luxury-gold/20 font-bold tracking-[0.2em] uppercase text-[10px]">
+                                    <Phone size={14} />
+                                    Nous Contacter
+                                </Button>
+                            </a>
+                            <a href="/reservation">
+                                <Button variant="outline" className="px-10 py-6 text-[10px] tracking-[0.2em] font-bold uppercase border-black text-black hover:bg-black hover:text-white transition-all duration-500">
+                                    Réserver en ligne
+                                </Button>
+                            </a>
+                        </div>
+                    </motion.div>
                 </div>
             </div>
         </div>
