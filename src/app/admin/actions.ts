@@ -38,3 +38,9 @@ export async function refuseReservation(id: string) {
   updateStatus(id, "refused");
   revalidatePath("/admin");
 }
+
+export async function deleteReservation(id: string) {
+  const { deleteById } = await import("@/lib/reservations");
+  deleteById(id);
+  revalidatePath("/admin");
+}

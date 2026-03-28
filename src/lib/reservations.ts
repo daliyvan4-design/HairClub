@@ -98,3 +98,8 @@ export function updateStatus(id: string, status: "confirmed" | "refused") {
   const updated = all.map((r) => (r.id === id ? { ...r, status } : r));
   write(updated);
 }
+
+export function deleteById(id: string) {
+  const all = read();
+  write(all.filter((r) => r.id !== id));
+}

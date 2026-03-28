@@ -1,6 +1,6 @@
 import { getPending, getConfirmed } from "@/lib/reservations";
-import { confirmReservation, refuseReservation } from "@/app/admin/actions";
-import { Check, X, Clock, CalendarCheck, Phone, Mail, Scissors } from "lucide-react";
+import { confirmReservation, refuseReservation, deleteReservation } from "@/app/admin/actions";
+import { Check, X, Clock, CalendarCheck, Phone, Mail, Scissors, Trash2 } from "lucide-react";
 
 function formatDate(date: string) {
   return new Date(date + "T00:00:00").toLocaleDateString("fr-FR", {
@@ -123,6 +123,7 @@ export default function AdminPage() {
                     <th className="px-4 py-3 text-[11px] uppercase tracking-widest text-luxury-gray font-medium">Prestation</th>
                     <th className="px-4 py-3 text-[11px] uppercase tracking-widest text-luxury-gray font-medium">Date</th>
                     <th className="px-4 py-3 text-[11px] uppercase tracking-widest text-luxury-gray font-medium">Heure</th>
+                    <th className="px-4 py-3"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -133,6 +134,17 @@ export default function AdminPage() {
                       <td className="px-4 py-3 text-luxury-gray">{r.prestation}</td>
                       <td className="px-4 py-3 text-luxury-gray">{formatDate(r.date)}</td>
                       <td className="px-4 py-3 text-luxury-gold font-semibold">{r.heure}</td>
+                      <td className="px-4 py-3">
+                        <form action={deleteReservation.bind(null, r.id)}>
+                          <button
+                            type="submit"
+                            className="flex items-center gap-1.5 px-3 py-1.5 bg-red-50 hover:bg-red-500 text-red-500 hover:text-white border border-red-200 hover:border-red-500 text-xs uppercase tracking-widest font-semibold transition-all duration-200"
+                            title="Supprimer"
+                          >
+                            <Trash2 size={12} /> Supprimer
+                          </button>
+                        </form>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
