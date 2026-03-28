@@ -116,7 +116,7 @@ export default function ContactPage() {
               className="w-full h-80"
             />
             <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
-              <div className="bg-white/95 backdrop-blur-sm border border-luxury-gold/20 p-6 m-4 max-w-[200px] pointer-events-auto">
+              <div className="bg-white border border-luxury-gold/20 p-6 m-4 max-w-[200px] pointer-events-auto shadow-lg">
                 <p className="text-[10px] uppercase tracking-[0.3em] text-luxury-gold mb-3">Visitez-nous</p>
                 <p className="text-xs text-luxury-gray font-light italic leading-relaxed mb-4">
                   &ldquo;Une immersion dans l&apos;univers de la distinction capillaire.&rdquo;

@@ -1,35 +1,30 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 
 const videos = ["/assets/videos/hero-1.mp4", "/assets/videos/hero-2.mp4"];
 
 export function Hero() {
   const [current, setCurrent] = useState(0);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    video.src = videos[current];
-    video.play().catch(() => {});
-  }, [current]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Video background */}
+      {/* Video background — key forces re-mount on video change */}
       <video
-        ref={videoRef}
-        onEnded={() => setCurrent((prev) => (prev + 1) % videos.length)}
+        key={videos[current]}
+        autoPlay
         muted
         playsInline
+        onEnded={() => setCurrent((prev) => (prev + 1) % videos.length)}
         className="absolute inset-0 w-full h-full object-cover"
-      />
+      >
+        <source src={videos[current]} type="video/mp4" />
+      </video>
 
-      {/* Dark overlay */}
-      <div className="absolute inset-0 bg-black/60" />
-      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/70 to-transparent" />
+      {/* Overlays */}
+      <div className="absolute inset-0 bg-black/55" />
+      <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black/60 to-transparent" />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-2xl mx-auto">

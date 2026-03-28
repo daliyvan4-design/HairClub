@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 
-const FILE = path.join(process.cwd(), "src/data/reservations.json");
+const DIR = path.join(process.cwd(), "src/data");
+const FILE = path.join(DIR, "reservations.json");
 const MAX_PER_DAY = 5;
 
 export type ReservationStatus = "pending" | "confirmed" | "refused";
@@ -13,8 +14,8 @@ export interface Reservation {
   telephone: string;
   email: string;
   prestation: string;
-  date: string; // YYYY-MM-DD
-  heure: string; // HH:MM
+  date: string;
+  heure: string;
   message: string;
   status: ReservationStatus;
   createdAt: string;
@@ -22,6 +23,7 @@ export interface Reservation {
 
 function read(): Reservation[] {
   try {
+    if (!fs.existsSync(FILE)) return [];
     return JSON.parse(fs.readFileSync(FILE, "utf-8"));
   } catch {
     return [];
@@ -29,6 +31,7 @@ function read(): Reservation[] {
 }
 
 function write(data: Reservation[]) {
+  if (!fs.existsSync(DIR)) fs.mkdirSync(DIR, { recursive: true });
   fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
 }
 
@@ -58,8 +61,13 @@ export function createReservation(
     (r) => r.date === data.date && r.status === "confirmed"
   ).length;
 
+  const pendingToday = all.filter(
+    (r) => r.date === data.date && r.status === "pending"
+  ).length;
+
+  // Refus automatique si déjà 5 réservations confirmées ou en attente
   const status: ReservationStatus =
-    confirmedToday >= MAX_PER_DAY ? "refused" : "pending";
+    confirmedToday + pendingToday >= MAX_PER_DAY ? "refused" : "pending";
 
   const reservation: Reservation = {
     ...data,
@@ -74,14 +82,14 @@ export function createReservation(
     return {
       success: false,
       status: "refused",
-      message: `Le créneau du ${data.date} est complet (${MAX_PER_DAY} réservations max). Veuillez choisir une autre date.`,
+      message: `Le créneau du ${new Date(data.date).toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" })} est complet (${MAX_PER_DAY} réservations max). Veuillez choisir une autre date.`,
     };
   }
 
   return {
     success: true,
     status: "pending",
-    message: "Votre demande a bien été envoyée. Nous vous contacterons pour confirmer.",
+    message: "Votre demande a bien été envoyée ! Nous vous contacterons rapidement pour confirmer votre rendez-vous.",
   };
 }
 
